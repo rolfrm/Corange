@@ -231,7 +231,7 @@ static type_size type_sizes[MAX_NUM_TYPES];
 
 static int type_index = 0;
 
-int type_find(char* type, size_t size) {
+int type_find(const char* type, size_t size) {
   
   /* Ensure can enter type */
   if (type_index >= MAX_NUM_TYPES) {
@@ -2170,6 +2170,12 @@ mat4 mat4_inverse(mat4 m) {
   return ret;
 }
 
+mat4 mat4_pseudo_inverse(mat4 m){
+  mat4 mt = mat4_transpose(m);
+  return mat4_mul_mat4(mt, mat4_inverse(mat4_mul_mat4(m,mt)));
+}
+
+
 void mat4_to_array(mat4 m, float* out) {
   
   out[0] = m.xx;
@@ -2563,6 +2569,11 @@ vec3 plane_closest(plane p, vec3 v) {
   return vec3_sub(v, vec3_mul(p.direction, plane_distance(p, v)));
 }
 
+void plane_print(plane plane){
+  vec3_print(plane.position);
+  vec3_print(plane.direction);
+}
+
 bool point_swept_inside_plane(vec3 point, vec3 v, plane p) {
 
   float angle = vec3_dot(p.direction, v);
@@ -2747,6 +2758,24 @@ box box_transform(box bb, mat4 world, mat3 world_normal) {
   
   return bb;
   
+}
+
+void box_print(box box){
+  printf("Box:\n");
+  printf("front:");
+  plane_print(box.front);
+  printf("\nback:");
+  plane_print(box.back);
+  printf("\ntop:");
+    
+  plane_print(box.top);
+  printf("\nbottom:");
+  plane_print(box.bottom);
+  printf("\nleft:");
+  plane_print(box.left);
+  printf("\nright:");
+  plane_print(box.right);
+  printf("\n");
 }
 
 frustum frustum_new(vec3 ntr, vec3 ntl, vec3 nbr, vec3 nbl, vec3 ftr, vec3 ftl, vec3 fbr, vec3 fbl) {
@@ -3363,6 +3392,7 @@ mesh* mesh_new() {
   m->num_triangles = 0;
   m->verticies = malloc(sizeof(vertex) * m->num_verts);
   m->triangles = malloc(sizeof(int) * m->num_triangles * 3);
+  m->name = NULL;
   
   return m;
   
@@ -3647,6 +3677,17 @@ void model_delete(model* m) {
   }
   free(m);
 }
+
+mesh * model_remove_mesh(model * m, int meshindex){
+  if(unlikely(meshindex < 0 || meshindex >= m->num_meshes))
+    error("Invalid mesh index");
+  mesh * mesh = m->meshes[meshindex];
+  memmove(m->meshes + meshindex, m->meshes + meshindex + 1, sizeof(mesh) *(m->num_meshes -1 - meshindex));
+  m->num_meshes -= 1;
+  m->meshes = realloc(m->meshes,  m->num_meshes * sizeof(mesh));
+  return mesh;
+}
+
 
 void model_generate_normals(model* m) {
 

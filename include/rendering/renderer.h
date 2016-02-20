@@ -109,6 +109,8 @@ typedef struct {
 
   /* Sky */
   sky* sky;
+  vec4 no_skydome_start;
+  vec4 no_skydome_end;
   
   /* Materials */
   asset_hndl mat_static;

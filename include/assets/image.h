@@ -106,12 +106,10 @@ long image_mask_count(image* i);
 void image_mask_median(image* i, int* u, int* v);
 void image_mask_random(image* i, int* u, int* v);
 
-image* image_read_from_file(char* filename);
-image* image_tga_load_file(char* filename);
-image* image_bmp_load_file(char* filename);
+image* image_read_from_file(const char* filename);
 
-void image_write_to_file(image* i, char* filename);
-void image_tga_save_file(image* i, char* filename);
-void image_bmp_save_file(image* i, char* filename);
+void image_write_to_file(image* i, const char* filename);
+void image_tga_save_file(image* i, const char* filename);
+void image_bmp_save_file(image* i, const char* filename);
 
 #endif

@@ -91,7 +91,7 @@ void ui_button_set_font(ui_button* b, asset_hndl f) {
   ui_text_set_font(b->label, f);
 }
 
-void ui_button_set_label(ui_button* b, char* label) {
+void ui_button_set_label(ui_button* b, const char* label) {
   ui_text_draw_string(b->label, label);
 }
 

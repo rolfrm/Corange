@@ -145,7 +145,7 @@ char* frame_rate_string();
 typedef int type_id;
 
 #define typeid(TYPE) type_find(#TYPE, sizeof(TYPE))
-type_id type_find(char* type, size_t size);
+type_id type_find(const char* type, size_t size);
 char* type_id_name(int id);
 
 /*
@@ -494,6 +494,7 @@ vec3 mat4_mul_vec3(mat4 m, vec3 v);
 
 float mat4_det(mat4 m);
 mat4 mat4_inverse(mat4 m);
+mat4 mat4_pseudo_inverse(mat4 m);
 
 mat4 mat3_to_mat4(mat3 m);
 mat3 mat4_to_mat3(mat4 m);
@@ -541,7 +542,7 @@ plane plane_new(vec3 position, vec3 direction);
 plane plane_transform(plane p, mat4 world, mat3 world_normal);
 plane plane_transform_space(plane p, mat3 space, mat3 space_normal);
 float plane_distance(plane p, vec3 point);
-
+void plane_print(plane p);
 bool point_inside_plane(vec3 point, plane p);
 bool point_outside_plane(vec3 point, plane p);
 bool point_intersects_plane(vec3 point, plane p);
@@ -572,7 +573,7 @@ box box_invert(box b);
 box box_invert_depth(box b);
 box box_invert_width(box b);
 box box_invert_height(box b);
-
+void box_print(box b);
 bool point_inside_box(vec3 point, box b);
 bool point_outside_box(vec3 point, box b);
 bool point_intersects_box(vec3 point, box b);
@@ -709,6 +710,7 @@ typedef struct {
   int num_triangles;
   vertex* verticies;
   uint32_t* triangles;
+  char * name;
 } mesh;
 
 mesh* mesh_new();
@@ -737,6 +739,7 @@ typedef struct {
 
 model* model_new();
 void model_delete(model* m);
+mesh * model_remove_mesh(model * m, int index);
 
 void model_generate_normals(model* m);
 void model_generate_tangents(model* m);

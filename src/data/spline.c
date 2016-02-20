@@ -195,7 +195,7 @@ float spline_get_x(spline* s, float y) {
   return x;
 }
 
-color_curves* color_curves_load(char* filename) {
+color_curves* color_curves_load(const char* filename) {
   
   SDL_RWops* file = SDL_RWFromFile(filename, "r");
   
@@ -327,7 +327,7 @@ vec3 color_curves_map(color_curves* cc, vec3 in) {
   return vec3_new(r, g, b);
 }
 
-void color_curves_write_lut(color_curves* cc, char* filename) {
+void color_curves_write_lut(color_curves* cc, const char* filename) {
 
   uint16_t lut_size = 64;
   

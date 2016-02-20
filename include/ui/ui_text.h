@@ -62,7 +62,7 @@ typedef struct {
 } ui_text;
 
 ui_text* ui_text_new();
-ui_text* ui_text_new_string(char* string);
+ui_text* ui_text_new_string(const char* string);
 void ui_text_delete(ui_text* text);
 
 void ui_text_move(ui_text* text, vec2 pos);
@@ -72,7 +72,7 @@ void ui_text_set_scale(ui_text* text, vec2 scale);
 void ui_text_align(ui_text* text, int halign, int valign);
 
 void ui_text_draw(ui_text* text);
-void ui_text_draw_string(ui_text* text, char* string);
+void ui_text_draw_string(ui_text* text, const char* string);
 
 void ui_text_event(ui_text* text, SDL_Event e);
 void ui_text_update(ui_text* text);

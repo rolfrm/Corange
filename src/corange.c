@@ -68,8 +68,14 @@ void corange_init(const char* core_assets_path) {
   asset_handler(cmesh, "col", col_load_file, cmesh_delete);
   asset_handler(terrain, "raw", raw_load_file, terrain_delete);
   
-  asset_handler(texture, "bmp", bmp_load_file, texture_delete);
-  asset_handler(texture, "tga", tga_load_file, texture_delete);
+  asset_handler(texture, "bmp", texture_load_file, texture_delete);
+  asset_handler(texture, "tga", texture_load_file, texture_delete);
+  asset_handler(texture, "png", texture_load_file, texture_delete);
+  asset_handler(texture, "tiff", texture_load_file, texture_delete);
+  asset_handler(texture, "jpg", texture_load_file, texture_delete);
+  asset_handler(texture, "jpeg", texture_load_file, texture_delete);
+  asset_handler(texture, "tif", texture_load_file, texture_delete);
+
   asset_handler(texture, "dds", dds_load_file, texture_delete);
   asset_handler(texture, "lut", lut_load_file, texture_delete);
   asset_handler(texture, "acv", acv_load_file, texture_delete);

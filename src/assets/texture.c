@@ -29,31 +29,15 @@ void texture_set_image(texture* t, image* i) {
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, i->width, i->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, i->data );
 }
 
-texture* tga_load_file( char* filename ) {
-  
-  image* i = image_tga_load_file(filename);
-  
+texture * texture_load_file(const char * filename){
+  image* i = image_read_from_file(filename);
+  if(i == NULL)
+    return NULL;
+
   texture* t = texture_new();
   glBindTexture(GL_TEXTURE_2D, texture_handle(t));
   glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_FALSE);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
-  
-  texture_set_image(t, i);
-  texture_set_filtering_anisotropic(t);
-  
-  image_delete(i);
-  
-  return t;
-}
-
-texture* bmp_load_file( char* filename ) {
-
-  image* i = image_bmp_load_file(filename);
-  
-  texture* t = texture_new();
-  glBindTexture(GL_TEXTURE_2D, texture_handle(t));
-  glTexParameteri( GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_FALSE );
-  glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0 );
   
   texture_set_image(t, i);
   texture_set_filtering_anisotropic(t);
@@ -194,7 +178,7 @@ void texture_set_filtering_anisotropic(texture* t) {
 }
 
 
-void texture_write_to_file(texture* t, char* filename){
+void texture_write_to_file(texture* t, const char* filename){
   
   image* i = texture_get_image(t);
   image_write_to_file(i, filename);
@@ -202,7 +186,7 @@ void texture_write_to_file(texture* t, char* filename){
   
 }
 
-texture* lut_load_file( char* filename ) {
+texture* lut_load_file( const char* filename ) {
   
   SDL_RWops* file = SDL_RWFromFile(filename, "r");
   if(file == NULL) {
@@ -239,7 +223,7 @@ texture* lut_load_file( char* filename ) {
   
 }
 
-void texture3d_write_to_file(texture* t, char* filename) {
+void texture3d_write_to_file(texture* t, const char* filename) {
   
   int t_width; 
   int t_height;
@@ -418,7 +402,7 @@ static bool is_power_of_two(unsigned int x) {
   return (x == 1);
 }
 
-texture* dds_load_file( char* filename ) {
+texture* dds_load_file( const char* filename ) {
   
   DdsLoadInfo loadInfoDXT1 =   { true,  false, false, 4, 8,  GL_COMPRESSED_RGBA_S3TC_DXT1 };
   DdsLoadInfo loadInfoDXT3 =   { true,  false, false, 4, 16, GL_COMPRESSED_RGBA_S3TC_DXT3 };
@@ -575,7 +559,7 @@ texture* dds_load_file( char* filename ) {
   
 }
 
-texture* acv_load_file( char* filename ) {
+texture* acv_load_file( const char* filename ) {
 
   color_curves* cc = color_curves_load(filename);
   

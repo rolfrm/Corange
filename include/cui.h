@@ -47,14 +47,14 @@ void ui_handler_cast(int type_id,
 #define ui_elem_new(fmt, type, ...) (type*)ui_elem_new_type_id(fmt, typeid(type), ##__VA_ARGS__)
 #define ui_elem_get_as(fmt, type, ...) ((type*)ui_elem_get_as_type_id(fmt, typeid(type), ##__VA_ARGS__));
 
-bool ui_elem_exists(char* fmt, ...);
-ui_elem* ui_elem_get(char* fmt, ...);
-ui_elem* ui_elem_get_as_type_id(char* fmt, int type_id, ...);
-ui_elem* ui_elem_new_type_id(char* fmt, int type_id, ...);
-void ui_elem_delete(char* fmt, ...);
-void ui_elem_event(char* fmt, SDL_Event e, ...);
-void ui_elem_update(char* fmt, ...);
-void ui_elem_render(char* fmt, ...);
+bool ui_elem_exists(const char* fmt, ...);
+ui_elem* ui_elem_get(const char* fmt, ...);
+ui_elem* ui_elem_get_as_type_id(const char* fmt, int type_id, ...);
+ui_elem* ui_elem_new_type_id(const char* fmt, int type_id, ...);
+void ui_elem_delete(const char* fmt, ...);
+void ui_elem_event(const char* fmt, SDL_Event e, ...);
+void ui_elem_update(const char* fmt, ...);
+void ui_elem_render(const char* fmt, ...);
 
 /* Get UI element name or type name */
 char* ui_elem_name(ui_elem* e);

@@ -41,9 +41,9 @@ typedef struct {
   spline* a_spline;
 } color_curves;
 
-color_curves* color_curves_load(char* filename);
+color_curves* color_curves_load(const char* filename);
 void color_curves_delete(color_curves* cc);
-void color_curves_write_lut(color_curves* cc, char* filename);
+void color_curves_write_lut(color_curves* cc, const char* filename);
 vec3 color_curves_map(color_curves* cc, vec3 in);
 
 #endif

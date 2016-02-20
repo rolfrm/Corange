@@ -2,6 +2,12 @@
 
 #include "data/vertex_hashtable.h"
 
+char * string_clone(const char * str){
+  if(str == NULL) return NULL;
+  char * out = calloc(1,strlen(str) + 1);
+  strcpy(out,str);
+  return out;
+}
 
 void renderable_add_mesh(renderable* r, mesh* m) {
   
@@ -10,6 +16,7 @@ void renderable_add_mesh(renderable* r, mesh* m) {
   r->num_surfaces++;
   r->surfaces = realloc(r->surfaces, sizeof(renderable_surface*) *  r->num_surfaces);
   r->surfaces[r->num_surfaces-1] = surface;
+  surface->name = string_clone(m->name);
   
 }
 
@@ -80,7 +87,7 @@ model* renderable_to_model(renderable* r) {
     me->num_triangles = s->num_triangles;
     me->verticies = realloc(me->verticies, sizeof(vertex) * me->num_verts);
     me->triangles = realloc(me->triangles, sizeof(uint32_t) * me->num_triangles * 3);
-    
+    me->name = string_clone(s->name);
     for(int j = 0; j < me->num_verts; j++) {
       me->verticies[j].position.x = vb_data[(j*18)+0];
       me->verticies[j].position.y = vb_data[(j*18)+1];
@@ -161,7 +168,7 @@ renderable_surface* renderable_surface_new(mesh* m) {
     
     vb_data[(i*18)+12] = uvs.x;
     vb_data[(i*18)+13] = uvs.y;
-    
+
     vb_data[(i*18)+14] = col.x;
     vb_data[(i*18)+15] = col.y;
     vb_data[(i*18)+16] = col.z;
@@ -260,7 +267,8 @@ void renderable_surface_delete(renderable_surface* s) {
 
   glDeleteBuffers(1, &s->vertex_vbo);
   glDeleteBuffers(1, &s->triangle_vbo);
-  
+  if(s->name != NULL)
+    free(s->name);
   free(s);
   
 }
@@ -485,12 +493,14 @@ renderable* obj_load_file(char* filename) {
   }
   
   char line[1024];
+  char group[512];
+  memset(group, 0, sizeof(group));
   while(SDL_RWreadline(file, line, 1024)) {
     
     char comment[512];
     char matlib[512];
     char object[512];
-    char group[512];
+
     char material[512];
     float px, py, pz, tx, ty, nx, ny, nz;
     int smoothing_group;
@@ -551,7 +561,15 @@ renderable* obj_load_file(char* filename) {
         for(int i = 0; i < active_mesh->num_triangles * 3; i++) {
           active_mesh->triangles[i] = int_list_get(tri_list, i);
         }
-      
+
+	  if (!has_normal_data) {
+	    mesh_generate_normals(active_mesh);
+	  }
+  
+	  if (!has_texcoord_data) {
+	    mesh_generate_texcoords_cylinder(active_mesh);
+	  }
+  
         obj_model->num_meshes++;
         obj_model->meshes = realloc(obj_model->meshes, sizeof(mesh*) * obj_model->num_meshes);
         obj_model->meshes[obj_model->num_meshes-1] = active_mesh;
@@ -569,7 +587,10 @@ renderable* obj_load_file(char* filename) {
       vert_hashes = vertex_hashtable_new(4096);
       
       active_mesh = malloc(sizeof(mesh));
-      
+      int group_len = strlen(group);
+      if(group_len != 0)
+	active_mesh->name = string_clone(group);
+      memset(group, 0, sizeof(group));
     }
     
     else if (sscanf(line, "usemtl %512s", material) == 1) {
@@ -879,11 +900,11 @@ renderable* obj_load_file(char* filename) {
   int_list_delete(tri_list);
   
   if (!has_normal_data) {
-    model_generate_normals(obj_model);
+    mesh_generate_normals(active_mesh);
   }
   
   if (!has_texcoord_data) {
-    model_generate_texcoords_cylinder(obj_model);
+    mesh_generate_texcoords_cylinder(active_mesh);
   }
   
   model_generate_tangents(obj_model);
