@@ -161,7 +161,8 @@ renderer* renderer_new(asset_hndl options) {
   
   /* Sky */
   dr->sky = sky_new();
-  
+  dr->no_skydome_start = vec4_new(0.65, 0.65, 0.65, 1.0);
+  dr->no_skydome_end = vec4_new(0.9, 0.9, 0.9, 1.0);
   /* Materials */
   folder_load(P("$CORANGE/shaders/deferred/"));
   
@@ -243,7 +244,7 @@ renderer* renderer_new(asset_hndl options) {
   
   glGenRenderbuffers(1, &dr->gdepth_buffer);
   glBindRenderbuffer(GL_RENDERBUFFER, dr->gdepth_buffer);
-  glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, gwidth, gheight);
+  glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32, gwidth, gheight);
   glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, dr->gdepth_buffer);  
   
   glGenTextures(1, &dr->gdiffuse_texture);
@@ -266,7 +267,7 @@ renderer* renderer_new(asset_hndl options) {
   
   glGenTextures(1, &dr->gdepth_texture);
   glBindTexture(GL_TEXTURE_2D, dr->gdepth_texture);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, gwidth, gheight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, gwidth, gheight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -399,7 +400,7 @@ renderer* renderer_new(asset_hndl options) {
   dr->glitch = 0.0;
   dr->time = 0.0;
   dr->time_of_day = 0;
-  dr->exposure = 0.0;
+  dr->exposure = 3.0;
   dr->exposure_speed = 1.0;
   dr->exposure_target = 0.4;
   dr->skydome_enabled = true;
@@ -920,8 +921,8 @@ static void render_clear(renderer* dr) {
   
     shader_program* shader = material_first_program(asset_hndl_ptr(&dr->mat_clear));
     shader_program_enable(shader);
-    shader_program_set_vec4(shader, "start", vec4_new(0.75, 0.75, 0.75, 1.0));
-    shader_program_set_vec4(shader, "end",   vec4_new(0.00, 0.00, 0.00, 1.0));
+    shader_program_set_vec4(shader, "start", dr->no_skydome_start);
+    shader_program_set_vec4(shader, "end",   dr->no_skydome_end);
     shader_program_set_mat4(shader, "world", mat4_id());
     shader_program_set_mat4(shader, "view",  mat4_id());
     shader_program_set_mat4(shader, "proj",  mat4_orthographic(-1, 1, -1, 1, -1, 1));
@@ -1063,15 +1064,32 @@ static void render_static(renderer* dr, static_object* so) {
     if (unlikely(config_bool(asset_hndl_ptr(&dr->options), "render_white"))) {
       shader_program_set_texture(shader, "diffuse_map", 0, dr->tex_grey);
     } else {
-      shader_program_set_texture(shader, "diffuse_map", 0, material_entry_item(me, "diffuse_map").as_asset);
+      if(material_entry_has_item(me, "diffuse_map"))
+	shader_program_set_texture(shader, "diffuse_map", 0, material_entry_item(me, "diffuse_map").as_asset);
     }
-    shader_program_set_texture(shader, "bump_map", 1, material_entry_item(me, "bump_map").as_asset);
-    shader_program_set_texture(shader, "spec_map", 2, material_entry_item(me, "spec_map").as_asset);
-    shader_program_set_float(shader, "glossiness", material_entry_item(me, "glossiness").as_float);
-    shader_program_set_float(shader, "bumpiness", material_entry_item(me, "bumpiness").as_float);
-    shader_program_set_float(shader, "specular_level", material_entry_item(me, "specular_level").as_float);
-    shader_program_set_float(shader, "alpha_test", material_entry_item(me, "alpha_test").as_float);
-    shader_program_set_int(shader, "material", material_entry_item(me, "material").as_int);
+    if(material_entry_has_item(me, "bump_map")){
+      shader_program_set_texture(shader, "bump_map", 1, material_entry_item(me, "bump_map").as_asset);
+    }else{
+      shader_program_set_texture_id(shader, "bump_map", 1, 0);
+    }
+    if(material_entry_has_item( me, "spec_map")){
+      shader_program_set_texture(shader, "spec_map", 2, material_entry_item(me, "spec_map").as_asset);
+    }
+    else{
+      shader_program_set_texture_id(shader, "spec_map", 2, 0);
+    }
+
+    float glossiness = material_entry_item(me, "glossiness").as_float;
+    float bumpiness = material_entry_item(me, "bumpiness").as_float;
+    float specular_level = material_entry_item(me, "specular_level").as_float;
+    float alpha_test = material_entry_item(me, "alpha_test").as_float;
+    int material = material_entry_item(me, "material").as_int;
+    
+    shader_program_set_float(shader, "glossiness", glossiness);
+    shader_program_set_float(shader, "bumpiness", bumpiness);
+    shader_program_set_float(shader, "specular_level", specular_level);
+    shader_program_set_float(shader, "alpha_test", alpha_test);
+    shader_program_set_int(shader, "material", material);
     
     glBindBuffer(GL_ARRAY_BUFFER, s->vertex_vbo);
     
@@ -2560,7 +2578,6 @@ static void render_tonemap(renderer* dr) {
   */
   
   //EXPOSURE += (EXPOSURE_TARGET - average) * EXPOSURE_SPEED;
-  dr->exposure = 3.0;
   
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
   glViewport(0, 0, graphics_viewport_width(), graphics_viewport_height());

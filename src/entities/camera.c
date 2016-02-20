@@ -11,6 +11,9 @@ camera* camera_new() {
   c->fov = 0.785398163;
   c->near_clip = 0.1;
   c->far_clip = 512.0;
+  c->orthographic = false;
+  c->ortho_width = 10;
+  c->ortho_height = 10;
   
   return c;
 }
@@ -28,7 +31,16 @@ mat4 camera_view_matrix(camera* c) {
 }
 
 mat4 camera_proj_matrix(camera* c) {
-  return mat4_perspective(c->fov, c->near_clip, c->far_clip, graphics_viewport_ratio());
+  if(c->orthographic){
+    float hwidth = c->ortho_width * 0.5;
+    float hheight = c->ortho_height * 0.5;
+
+    mat4 mout = mat4_orthographic(hwidth, -hwidth, -hheight, hheight , c->near_clip,c->far_clip);
+
+    return mout;
+  }else{
+    return mat4_perspective(c->fov, c->near_clip, c->far_clip, graphics_viewport_ratio());
+  }
 }
 
 mat4 camera_view_proj_matrix(camera* c) {
@@ -64,7 +76,12 @@ void camera_control_orbit(camera* c, SDL_Event e) {
     break;
     
     case SDL_MOUSEWHEEL:
-      c->position = vec3_add(c->position, vec3_mul(vec3_normalize(c->position), -e.wheel.y));
+      if(c->orthographic){
+	c->ortho_width += e.wheel.y;
+	c->ortho_height += e.wheel.y;
+      }else{
+	c->position = vec3_add(c->position, vec3_mul(vec3_normalize(c->position), -e.wheel.y));
+      }
     break;
 
   }

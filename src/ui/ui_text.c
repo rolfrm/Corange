@@ -46,7 +46,7 @@ ui_text* ui_text_new() {
 
 }
 
-ui_text* ui_text_new_string(char* string) {
+ui_text* ui_text_new_string(const char* string) {
   
   ui_text* t = ui_text_new();
   ui_text_draw_string(t, string);
@@ -99,7 +99,7 @@ void ui_text_update(ui_text* t) {
 
 }
 
-void ui_text_draw_string(ui_text* t, char* string) {
+void ui_text_draw_string(ui_text* t, const char* string) {
   
   t->string = realloc(t->string, strlen(string) + 1);
   strcpy(t->string, string);

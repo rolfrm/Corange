@@ -20,7 +20,6 @@ typedef struct {
 } texture;
 
 texture* texture_new();
-texture* texture_new_handle(GLuint h);
 void texture_delete(texture* t);
 
 GLuint texture_handle(texture* t);
@@ -34,13 +33,13 @@ void texture_set_filtering_nearest(texture* t);
 void texture_set_filtering_linear(texture* t);
 void texture_set_filtering_anisotropic(texture* t);
 
-texture* bmp_load_file( char* filename );
-texture* tga_load_file( char* filename );
-texture* dds_load_file( char* filename );
-texture* lut_load_file( char* filename );
-texture* acv_load_file( char* filename );
 
-void texture_write_to_file(texture* t, char* filename);
-void texture3d_write_to_file(texture* t, char* filename);
+texture* texture_load_file(const char * filename);
+texture* dds_load_file( const char* filename );
+texture* lut_load_file( const char* filename );
+texture* acv_load_file( const char* filename );
+
+void texture_write_to_file(texture* t, const char* filename);
+void texture3d_write_to_file(texture* t, const char* filename);
 
 #endif

@@ -17,6 +17,8 @@ typedef struct {
   float fov;
   float near_clip;
   float far_clip;
+  bool orthographic;
+  float ortho_width, ortho_height;
 } camera;
 
 camera* camera_new();

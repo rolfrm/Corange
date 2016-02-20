@@ -25,6 +25,7 @@ typedef struct {
   int num_verticies;
   int num_triangles;
   sphere bound;
+  char * name;
 } renderable_surface;
 
 renderable_surface* renderable_surface_new(mesh* m);

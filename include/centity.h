@@ -25,11 +25,11 @@ void entity_handler_cast(int type_id, void* entity_new() , void entity_del(void*
 #define entity_new(fmt, type, ...) (type*)entity_new_type_id(fmt, typeid(type), ##__VA_ARGS__)
 #define entity_get_as(fmt, type, ...) ((type*)entity_get_as_type_id(fmt, typeid(type)), ##__VA_ARGS__)
 
-bool entity_exists(char* fmt, ...);
-entity* entity_get(char* fmt, ...);
-entity* entity_get_as_type_id(char* fmt, int type_id, ...);
-entity* entity_new_type_id(char* fmt, int type_id, ...);
-void entity_delete(char* fmt, ...);
+bool entity_exists(const char* fmt, ...);
+entity* entity_get(const char* fmt, ...);
+entity* entity_get_as_type_id(const char* fmt, int type_id, ...);
+entity* entity_new_type_id(const char* fmt, int type_id, ...);
+void entity_delete(const char* fmt, ...);
 
 /* Get the name or typename from an entity */
 char* entity_name(entity* e);

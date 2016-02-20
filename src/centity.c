@@ -54,7 +54,7 @@ void entity_handler_cast(int type_id, void* entity_new_func() , void entity_del_
   num_entity_handlers++;
 }
 
-entity* entity_new_type_id(char* fmt, int type_id, ...) {
+entity* entity_new_type_id(const char* fmt, int type_id, ...) {
 
   char entity_name_buff[512];
   
@@ -96,7 +96,7 @@ entity* entity_new_type_id(char* fmt, int type_id, ...) {
   return e;
 }
 
-bool entity_exists(char* fmt, ...) {
+bool entity_exists(const char* fmt, ...) {
 
   char entity_name_buff[512];
 
@@ -109,7 +109,7 @@ bool entity_exists(char* fmt, ...) {
   
 }
 
-entity* entity_get(char* fmt, ...) {
+entity* entity_get(const char* fmt, ...) {
   
   char entity_name_buff[512];
   
@@ -126,7 +126,7 @@ entity* entity_get(char* fmt, ...) {
   
 }
 
-entity* entity_get_as_type_id(char* fmt, int type_id, ...) {
+entity* entity_get_as_type_id(const char* fmt, int type_id, ...) {
   
   char entity_name_buff[512];
   
@@ -148,7 +148,7 @@ entity* entity_get_as_type_id(char* fmt, int type_id, ...) {
   return dict_get(entities, entity_name_buff);
 }
 
-void entity_delete(char* fmt, ...) {
+void entity_delete(const char* fmt, ...) {
   
   char entity_name_buff[512];
   

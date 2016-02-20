@@ -97,7 +97,7 @@ void ui_handler_cast(int type_id, void* ui_elem_new_func(), void ui_elem_del_fun
   
 }
 
-bool ui_elem_exists(char* fmt, ...) {
+bool ui_elem_exists(const char* fmt, ...) {
   
   char ui_elem_name_buff[512];
   
@@ -109,7 +109,7 @@ bool ui_elem_exists(char* fmt, ...) {
   return dict_contains(ui_elems, ui_elem_name_buff);
 }
 
-ui_elem* ui_elem_new_type_id(char* fmt, int type_id, ...) {
+ui_elem* ui_elem_new_type_id(const char* fmt, int type_id, ...) {
   
   char ui_elem_name_buff[512];
   
@@ -151,7 +151,7 @@ ui_elem* ui_elem_new_type_id(char* fmt, int type_id, ...) {
   
 }
 
-ui_elem* ui_elem_get(char* fmt, ...) {
+ui_elem* ui_elem_get(const char* fmt, ...) {
 
   char ui_elem_name_buff[512];
   
@@ -168,7 +168,7 @@ ui_elem* ui_elem_get(char* fmt, ...) {
 
 }
 
-ui_elem* ui_elem_get_as_type_id(char* fmt, int type_id, ...) {
+ui_elem* ui_elem_get_as_type_id(const char* fmt, int type_id, ...) {
 
   char ui_elem_name_buff[512];
   
@@ -191,7 +191,7 @@ ui_elem* ui_elem_get_as_type_id(char* fmt, int type_id, ...) {
 
 }
 
-void ui_elem_event(char* fmt, SDL_Event e, ...) {
+void ui_elem_event(const char* fmt, SDL_Event e, ...) {
 
   char ui_elem_name_buff[512];
   
@@ -214,7 +214,7 @@ void ui_elem_event(char* fmt, SDL_Event e, ...) {
 
 }
 
-void ui_elem_update(char* fmt, ...) {
+void ui_elem_update(const char* fmt, ...) {
 
   char ui_elem_name_buff[512];
   
@@ -237,7 +237,7 @@ void ui_elem_update(char* fmt, ...) {
 
 }
 
-void ui_elem_render(char* fmt, ...) {
+void ui_elem_render(const char* fmt, ...) {
 
   char ui_elem_name_buff[512];
   
@@ -260,7 +260,7 @@ void ui_elem_render(char* fmt, ...) {
 
 }
 
-void ui_elem_delete(char* fmt, ...) {
+void ui_elem_delete(const char* fmt, ...) {
 
   char ui_elem_name_buff[512];
   
