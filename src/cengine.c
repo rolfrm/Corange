@@ -3203,7 +3203,7 @@ bool point_swept_outside_sphere(sphere s, vec3 v, vec3 point) {
   float B = 2 * vec3_dot(v, o);
   float C = vec3_dot(o, o) - (s.radius * s.radius);
   
-  float t0, t1, t;
+  float t0, t1;
   if (!quadratic(A, B, C, &t0, &t1)) { return true; }
   
   return (!between_or(t0, 0, 1) && !between_or(t1, 0, 1));
@@ -3229,7 +3229,7 @@ bool sphere_swept_outside_sphere(sphere s1, vec3 v, sphere s2) {
   float B = 2 * vec3_dot(v, o);
   float C = vec3_dot(o, o) - (rtot * rtot);
   
-  float t0, t1, t;
+  float t0, t1;
   if (!quadratic(A, B, C, &t0, &t1)) { return true; }
   
   return (!between_or(t0, 0, 1) && !between_or(t1, 0, 1));

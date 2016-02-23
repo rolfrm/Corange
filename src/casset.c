@@ -74,9 +74,9 @@ fpath asset_unmap_filename(fpath filename) {
     
       fpath sub; strcpy(sub.ptr, subptr);
     
-      int replace_len = strlen(variable.ptr);
+      //int replace_len = strlen(variable.ptr);
       int start_len = strlen(fullpath.ptr) - strlen(sub.ptr);
-      int ext_len = strlen(sub.ptr) - strlen(fullmapping.ptr);
+      //int ext_len = strlen(sub.ptr) - strlen(fullmapping.ptr);
       
       fullpath.ptr[start_len] = '\0';
       strcat(fullpath.ptr, variable.ptr);
@@ -106,9 +106,9 @@ fpath asset_map_filename(fpath filename) {
       
       fpath sub; strcpy(sub.ptr, subptr);
     
-      int replace_len = strlen(mapping.ptr);
+      //int replace_len = strlen(mapping.ptr);
       int start_len = strlen(out.ptr) - strlen(sub.ptr);
-      int ext_len = strlen(sub.ptr) - strlen(variable.ptr);
+      //int ext_len = strlen(sub.ptr) - strlen(variable.ptr);
       
       out.ptr[start_len] = '\0';
       strcat(out.ptr, mapping.ptr);

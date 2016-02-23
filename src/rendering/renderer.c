@@ -1665,14 +1665,15 @@ void render_light(renderer* dr, light* l) {
   shader_program_set_mat4(shader, "view", mat4_id());
   shader_program_set_mat4(shader, "proj", mat4_orthographic(0, graphics_viewport_width(), graphics_viewport_height(), 0, -1, 1));
   
-  float top = ((-light_pos.y + 1) / 2) * graphics_viewport_height() - 8;
+  // TODO: Implement
+  /*float top = ((-light_pos.y + 1) / 2) * graphics_viewport_height() - 8;
   float bot = ((-light_pos.y + 1) / 2) * graphics_viewport_height() + 8;
   float left = ((light_pos.x + 1) / 2) * graphics_viewport_width() - 8;
   float right = ((light_pos.x + 1) / 2) * graphics_viewport_width() + 8;
   
-  // TODO: Implement
+
   
-  /*
+  
   float light_position[] = {};
   float light_texcoord[] = {};
   
@@ -1887,9 +1888,9 @@ void render_paint_circle(renderer* dr, mat4 axis, float radius) {
   
 }
 
-static camera* compare_cam = NULL;
+//static camera* compare_cam = NULL;
 
-static float render_object_cost(const render_object* ro) {
+/*static float render_object_cost(const render_object* ro) {
   switch (ro->type) {
     case RO_TYPE_STATIC:     return vec3_dist_sqrd(compare_cam->position, ro->static_object->position);
     case RO_TYPE_INSTANCE:   return vec3_dist_sqrd(compare_cam->position, ro->instance_object->instances[0].position);
@@ -1898,9 +1899,9 @@ static float render_object_cost(const render_object* ro) {
     case RO_TYPE_LANDSCAPE:  return vec3_dist_sqrd(compare_cam->position, vec3_zero());
     default: return FLT_MAX;
   }
-}
+  }*/
 
-static int render_object_sort(const void* ro0, const void* ro1) {
+/*static int render_object_sort(const void* ro0, const void* ro1) {
   
   float cost0 = render_object_cost(ro0);
   float cost1 = render_object_cost(ro1);
@@ -1913,7 +1914,7 @@ static int render_object_sort(const void* ro0, const void* ro1) {
     return -1;
   }
   
-}
+  }*/
 
 static void render_gbuffer(renderer* dr) {
   
