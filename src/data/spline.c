@@ -211,7 +211,7 @@ color_curves* color_curves_load(const char* filename) {
   
   SDL_RWclose(file);
   
-  int version = contents[0] | contents[1];
+  //int version = contents[0] | contents[1];
   int count = contents[2] | contents[3];
   
   if (count != 5) {

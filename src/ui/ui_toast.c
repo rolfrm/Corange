@@ -9,8 +9,6 @@ static int toasts_num = 0;
 static ui_toast* toasts[MAX_TOASTS];
 
 static void reposition_toasts() {
-  
-  int width = graphics_viewport_width();
   int height = graphics_viewport_height();
   float start = 2 * (height / 3);
   

@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <dirent.h>
 #include <unistd.h>
-
+#define UNUSED(x) (void)x;
 #ifdef _WIN32
   #include <windows.h>
   #include <winbase.h>
@@ -25,6 +25,7 @@ void SDL_PathFullName(char* dst, const char* path) {
 
 void SDL_PathFullName(char* dst, const char* path) {
   char* ret = realpath(path, dst);
+  UNUSED(ret);
 }
 
 #endif
@@ -129,6 +130,7 @@ static char curr_dir[MAX_PATH];
 
 char* SDL_GetWorkingDir() {
   char* discard = getcwd(curr_dir, sizeof(curr_dir));
+  UNUSED(discard);
   return curr_dir;
 }
 

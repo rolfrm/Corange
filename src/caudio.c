@@ -4,7 +4,6 @@ static int audio_rate = 22050;
 static Uint16 audio_format = AUDIO_S16;
 static int audio_channels = 2;
 static int audio_buffers = 4096;
-static float volume = 1.0;
 
 void audio_init() {
   
@@ -58,7 +57,7 @@ void audio_music_resume() {
 }
 
 void audio_music_stop() {
-  int err = Mix_FadeOutMusic(fade_time);
+  Mix_FadeOutMusic(fade_time);
 }
 
 void audio_music_set_volume(float volume) {

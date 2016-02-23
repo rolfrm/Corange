@@ -51,7 +51,6 @@ void ui_event(SDL_Event e) {
   
   for (int i = 0; i < ui_elem_names->num_items; i++) {
     char* name = list_get(ui_elem_names, i);
-    int* type_id = dict_get(ui_elem_types, name);
     ui_elem_event(name, e);
   }
 
@@ -61,7 +60,6 @@ void ui_update(void) {
 
   for (int i = 0; i < ui_elem_names->num_items; i++) {
     char* name = list_get(ui_elem_names, i);
-    int* type_id = dict_get(ui_elem_types, name);
     ui_elem_update(name);
   }
 
@@ -71,7 +69,6 @@ void ui_render(void) {
 
   for(int i = 0; i < ui_elem_names->num_items; i++) {
     char* name = list_get(ui_elem_names, i);
-    int* type_id = dict_get(ui_elem_types, name);
     ui_elem_render(name);
   }
 
