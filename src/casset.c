@@ -446,6 +446,13 @@ asset* asset_get_load(fpath path) {
   return asset_hndl_ptr(&ah);
 }
 
+void asset_define(fpath path, asset * asset){
+  path = asset_map_filename(path);
+  dict_set(asset_dict, path.ptr, asset);
+}
+
+
+
 asset* asset_get(fpath path) {
   asset_hndl ah = asset_hndl_new(path);
   return asset_hndl_ptr(&ah);

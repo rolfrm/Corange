@@ -83,7 +83,7 @@ asset* asset_get(fpath path);
 
 #define asset_get_as(path, type) ((type*)asset_get_as_type(path, typeid(type)))
 asset* asset_get_as_type(fpath path, type_id type);
-
+void asset_define(fpath path, asset * asset);
 /* Reload all assets of a given type */
 #define asset_reload_type(type) asset_reload_type_id(typeid(type))
 void asset_reload_type_id(type_id type);
