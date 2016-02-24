@@ -15,7 +15,7 @@ static FILE* logout = NULL;
 
 static void corange_error(const char* str) {
   
-  fprintf(stderr, "%s\n", str); fflush(stderr);
+  //fprintf(stderr, "%s\n", str); fflush(stderr);
   fprintf(logout, "%s\n", str); fflush(logout);
   
   SDL_PrintStackTrace();
@@ -23,13 +23,13 @@ static void corange_error(const char* str) {
 }
 
 static void corange_warning(const char* str) {
-  fprintf(stdout, "%s\n", str); fflush(stdout);
+  //fprintf(stdout, "%s\n", str); fflush(stdout);
   fprintf(logout, "%s\n", str); fflush(logout);
   
 }
 
 static void corange_debug(const char* str) {
-  fprintf(stdout, "%s\n", str); fflush(stdout);
+  //fprintf(stdout, "%s\n", str); fflush(stdout);
   fprintf(logout, "%s\n", str); fflush(logout);
 }
 

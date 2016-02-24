@@ -3681,11 +3681,11 @@ void model_delete(model* m) {
 mesh * model_remove_mesh(model * m, int meshindex){
   if(unlikely(meshindex < 0 || meshindex >= m->num_meshes))
     error("Invalid mesh index");
-  mesh * mesh = m->meshes[meshindex];
-  memmove(m->meshes + meshindex, m->meshes + meshindex + 1, sizeof(mesh) *(m->num_meshes -1 - meshindex));
+  mesh * _mesh = m->meshes[meshindex];
+  memmove(m->meshes + meshindex, m->meshes + meshindex + 1, sizeof(mesh *) *(m->num_meshes -1 - meshindex));
   m->num_meshes -= 1;
-  m->meshes = realloc(m->meshes,  m->num_meshes * sizeof(mesh));
-  return mesh;
+  m->meshes = realloc(m->meshes,  m->num_meshes * sizeof(mesh *));
+  return _mesh;
 }
 
 
